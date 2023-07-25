@@ -186,7 +186,7 @@ class TransactionController extends Controller
 
         $refund = BuktiTransfer::find($id);
         $refund->bukti_refund = $imageName;
-        $refund->status       = 'Selesai';
+        $refund->status       = 'Refund';
         $refund->save();
         // Public Folder
         $request->bukti->move(public_path('bukti_refund'), $imageName);
