@@ -32,6 +32,28 @@ class RejectController extends Controller
         return view('reject.index', ['transactions' => $transactions, 'reject' => $reject]);
     }
 
+    public function upload_bukti($id){
+        $data['reject'] = Reject::find($id)->toArray();
+        return view('reject.upload_bukti', $data);
+    }
+
+    public function proses_upload_bukti(Request $request, $id){
+        $request->validate([
+            'bukti' => 'required|image|mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $imageName = time().'.'.$request->bukti->extension();
+
+        $reject = Reject::find($id);
+        $reject->bukti_refund = $imageName;
+        $reject->status       = 'Selesai';
+        $reject->save();
+        // Public Folder
+        $request->bukti->move(public_path('bukti_refund'), $imageName);
+       
+        return redirect('reject');
+    }
+
     public function change_status($id, $status)
     {
         Reject::where('transaction_id', $id)->update([

@@ -10,6 +10,7 @@ use App\Models\BuktiTransfer;
 use App\Models\Reject;
 use App\Models\Kategori;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use PDF;
 
 use App\Models\Barang;
@@ -53,11 +54,7 @@ class TransactionController extends Controller
         $order_id = $request->get('order_id') ? $request->get('order_id') : '';
         $nama = $request->get('nama') ? $request->get('nama') : '';
         $data['list'] = Transaction::where('user_id', Auth::user()->id)
-<<<<<<< HEAD
                                     ->select('transactions.*', 'users.nama','bukti_transfer.bukti_refund as refund_b','bukti_transfer.status as status_b','bukti_transfer.id as bukti_id','rejects.status as status_r','rejects.bukti_refund as refund_r', 'rejects.id as reject_id')
-=======
-                                    ->select('transactions.*', 'users.nama','bukti_transfer.status as status_b','bukti_transfer.id as bukti_id','rejects.status as status_r', 'rejects.id as reject_id')
->>>>>>> 0f23afc39607aaffc18351738969db6999693523
                                     ->join('users', 'users.id', '=', 'transactions.user_id','left')
                                     ->join('bukti_transfer', 'bukti_transfer.transaction_id', '=', 'transactions.id','left')
                                     ->join('rejects', 'rejects.transaction_id', '=', 'transactions.id','left')
@@ -192,11 +189,7 @@ class TransactionController extends Controller
         $refund->status       = 'Selesai';
         $refund->save();
         // Public Folder
-<<<<<<< HEAD
         $request->bukti->move(public_path('bukti_refund'), $imageName);
-=======
-        $request->bukti->move(public_path('bukti_transfer'), $imageName);
->>>>>>> 0f23afc39607aaffc18351738969db6999693523
         return redirect('transaction');
     }
 
@@ -246,21 +239,30 @@ class TransactionController extends Controller
 
     public function proses_upload(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request
+        $validator = Validator::make($request->all(), [
             'bukti' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
-        $imageName = time().'.'.$request->bukti->extension();
+        // If validation fails, redirect back with error messages
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
+        // Generate a unique image name using timestamp
+        $imageName = time().'.'.$request->file('bukti')->extension();
+
+        // Create a new record in the 'BuktiTransfer' table
         BuktiTransfer::create([
-            'transaction_id' => $request->order_id,
+            'transaction_id' => $request->input('order_id'),
             'gambar' => $imageName,
             'status' => 'pending'
         ]);
 
-        // Public Folder
-        $request->bukti->move(public_path('bukti_transfer'), $imageName);
-       
+        // Move the uploaded image to the 'bukti_transfer' folder in the public directory
+        $request->file('bukti')->move(public_path('bukti_transfer'), $imageName);
+
+        // Redirect to the transaction history page after successful upload
         return redirect('/transaction/history');
     }
 
