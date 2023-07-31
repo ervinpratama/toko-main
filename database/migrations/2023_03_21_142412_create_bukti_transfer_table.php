@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bukti_transfer', function (Blueprint $table) {
+        Schema::create('rejects', function (Blueprint $table) {
             $table->id();
             $table->integer('transaction_id');
-            $table->string('gambar');
+            $table->string('images');
+            $table->string('alasan');
             $table->string('status');
             $table->string('bank_refund')->nullable();
             $table->string('rek_refund')->nullable();
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bukti_transfer');
+        Schema::dropIfExists('rejects');
     }
 };
