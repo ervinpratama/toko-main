@@ -66,7 +66,9 @@
                             <span class="badge bg-success">Diterima</span>
                             @elseif ($row['status_b'] == "dikirim")
                             <span class="badge bg-success">Dikirim</span>
-                            @elseif ($row['status_b'] == "Refund")
+                            @elseif ($row['status_b'] == "Selesai")
+                            <span class="badge bg-success">Refund Selesai</span>
+                            @elseif ($row['status_b'] == "Refund Selesai")
                             <span class="badge bg-success">Refund Selesai</span>
                             @elseif ($row['status_b'] == "dibatalkan")
                             <span class="badge bg-danger">Dibatalkan</span>

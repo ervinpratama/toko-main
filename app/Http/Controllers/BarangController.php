@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\Kategori;
+use App\Models\PengrajinModel;
 
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class BarangController extends Controller
 {
 	public function index()
 	{
-		$barang = Barang::get();
+		$barang = Barang::select('barang.*','pengrajin.nama as nama_pengrajin')->leftjoin('pengrajin', 'barang.id_pengrajin', '=', 'pengrajin.id')->get();
 		$categories = Kategori::all();
 
 		return view('barang.index', ['data' => $barang, 'categories' => $categories]);
@@ -20,8 +21,9 @@ class BarangController extends Controller
 	public function tambah()
 	{
 		$kategori = Kategori::get();
+		$pengrajin = PengrajinModel::get();
 
-		return view('barang.form', ['kategori' => $kategori, 'jumlahBarang' => 0]);
+		return view('barang.form', ['pengrajin'=>$pengrajin, 'kategori' => $kategori, 'jumlahBarang' => 0]);
 	}
 
 	public function simpan(Request $request)
@@ -29,6 +31,7 @@ class BarangController extends Controller
         $this->validate($request, [
             'nama_barang' => 'required',
             'id_kategori' => 'required',
+            'id_pengrajin' => 'required',
             'harga' => 'required',
             'jumlah' => 'required',
             'ukuran' => 'required',
@@ -61,6 +64,7 @@ class BarangController extends Controller
 			'kode_barang' => $newCode,
 			'nama_barang' => $request->nama_barang,
 			'id_kategori' => $request->id_kategori,
+            'id_pengrajin' => $request->id_pengrajin,
 			'harga' => $request->harga,
 			'jumlah' => $request->jumlah,
             'ukuran' => $request->ukuran,
@@ -84,8 +88,9 @@ class BarangController extends Controller
 	{
 		$barang = Barang::find($id);
 		$kategori = Kategori::get();
+		$pengrajin = PengrajinModel::get();
 
-		return view('barang.form', ['barang' => $barang, 'kategori' => $kategori]);
+		return view('barang.form', ['pengrajin'=>$pengrajin, 'barang' => $barang, 'kategori' => $kategori]);
 	}
 
 	public function update($id, Request $request)
@@ -93,6 +98,7 @@ class BarangController extends Controller
         $this->validate($request, [
             'nama_barang' => 'required',
             'id_kategori' => 'required',
+            'id_pengrajin' => 'required',
             'harga' => 'required',
             'jumlah' => 'required',
             'ukuran' => 'required',
@@ -132,6 +138,7 @@ class BarangController extends Controller
 			$data = [
 				'nama_barang' => $request->nama_barang,
 				'id_kategori' => $request->id_kategori,
+				'id_pengrajin' => $request->id_pengrajin,
 				'harga' => $request->harga,
 				'jumlah' => $request->jumlah,
 				'ukuran' => $request->ukuran,
@@ -146,6 +153,7 @@ class BarangController extends Controller
 			$data = [
 				'nama_barang' => $request->nama_barang,
 				'id_kategori' => $request->id_kategori,
+				'id_pengrajin' => $request->id_pengrajin,
 				'harga' => $request->harga,
 				'jumlah' => $request->jumlah,
 				'ukuran' => $request->ukuran,

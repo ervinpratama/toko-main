@@ -12,7 +12,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Welcome Message</h6>
                     </div>
                     <div class="card-body">
-                        SELAMAT DATANG!
+                        Welcome to Super Admin Dashboard
                     </div>
                 </div>
             </div>

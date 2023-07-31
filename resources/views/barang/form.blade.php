@@ -79,6 +79,20 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="id_pengrajin">Pengrajin</label>
+                            <select name="id_pengrajin" id="id_pengrajin" class="custom-select @error('id_pengrajin') is-invalid @enderror">
+                                <option value="" selected disabled hidden>-- Pilih Pengrajin --</option>
+                                @foreach ($pengrajin as $row)
+                                    <option value="{{ $row->id }}" {{ isset($barang) ? ($barang->id_pengrajin == $row->id ? 'selected' : '') : '' }}>{{ $row->nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_pengrajin')
+                            <div class="alert alert-danger mt-2">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="gambar">Foto Barang</label><br/>
                             @if (isset($barang))
                                 <img src="{{ asset('foto_product/'.$barang->foto)}}" width="200" alt="">

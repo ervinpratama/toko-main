@@ -10,7 +10,6 @@ use App\Models\BuktiTransfer;
 use App\Models\Reject;
 use App\Models\Kategori;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use PDF;
 
 use App\Models\Barang;
@@ -186,7 +185,7 @@ class TransactionController extends Controller
 
         $refund = BuktiTransfer::find($id);
         $refund->bukti_refund = $imageName;
-        $refund->status       = 'Refund';
+        $refund->status       = 'Refund Selesai';
         $refund->save();
         // Public Folder
         $request->bukti->move(public_path('bukti_refund'), $imageName);
@@ -239,30 +238,21 @@ class TransactionController extends Controller
 
     public function proses_upload(Request $request)
     {
-        // Validate the incoming request
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'bukti' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
-        // If validation fails, redirect back with error messages
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        $imageName = time().'.'.$request->bukti->extension();
 
-        // Generate a unique image name using timestamp
-        $imageName = time().'.'.$request->file('bukti')->extension();
-
-        // Create a new record in the 'BuktiTransfer' table
         BuktiTransfer::create([
-            'transaction_id' => $request->input('order_id'),
+            'transaction_id' => $request->order_id,
             'gambar' => $imageName,
             'status' => 'pending'
         ]);
 
-        // Move the uploaded image to the 'bukti_transfer' folder in the public directory
-        $request->file('bukti')->move(public_path('bukti_transfer'), $imageName);
-
-        // Redirect to the transaction history page after successful upload
+        // Public Folder
+        $request->bukti->move(public_path('bukti_transfer'), $imageName);
+       
         return redirect('/transaction/history');
     }
 
@@ -340,10 +330,11 @@ class TransactionController extends Controller
         $tgl_selesai = date('Y-m-d', strtotime($request->to));
 
         $transactions = TransactionDetail::
-        select('transactions.id', 'transactions.order_id', 'transactions.no_hp', 'transactions.alamat', 'transactions.total', 'transactions.transaction_date', 'transaction_detail.qty', 'transaction_detail.price', 'barang.nama_barang', 'bukti_transfer.status')
+        select('transactions.id', 'transactions.order_id','pengrajin.nama as nama_pengrajin', 'transactions.no_hp', 'transactions.alamat', 'transactions.total', 'transactions.transaction_date', 'transaction_detail.qty', 'transaction_detail.price', 'barang.nama_barang', 'bukti_transfer.status')
         ->join('transactions', 'transactions.id', '=', 'transaction_detail.transaction_id')
         ->join('barang', 'barang.id', '=', 'transaction_detail.barang_id')
         ->leftJoin('bukti_transfer', 'transactions.id', '=', 'bukti_transfer.transaction_id')
+        ->join('pengrajin', 'barang.id_pengrajin', '=', 'pengrajin.id')
         ->where('transactions.transaction_date', '>=', $tgl_mulai)
         ->where('transactions.transaction_date', '<=', $tgl_selesai)
         ->where('bukti_transfer.status', '=', 'selesai')

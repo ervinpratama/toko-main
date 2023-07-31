@@ -81,10 +81,10 @@
                 <p>Status Pembayaran : <span class="badge bg-success">Diterima</span></p>
                 @elseif (isset($data->bukti_transfer->status) && $data->bukti_transfer->status == "dikirim")
                 <p>Status Pembayaran : <span class="badge bg-success">Dikirim</span></p>
+                @elseif (isset($data->bukti_transfer->status) && $data->bukti_transfer->status == "Refund Selesai")
+                <p>Status Pembayaran : <span class="badge bg-success">Refund Selesai</span></p>
                 @elseif (isset($data->bukti_transfer->status) && $data->bukti_transfer->status == "dibatalkan")
                 <p>Status Pembayaran : <span class="badge bg-danger">Dibatalkan</span></p>
-                @elseif (isset($data->bukti_transfer->status) && $data->bukti_transfer->status == "Refund")
-                <p>Status Pembayaran : <span class="badge bg-success">Refund Selesai</span></p>
                 @elseif (isset($data->bukti_transfer->status) && $data->bukti_transfer->status == "selesai")
                 <p>Status Pembayaran : <span class="badge bg-info">Selesai</span></p>
                 @else

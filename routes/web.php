@@ -10,6 +10,8 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PenjualController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\RejectController;
+use App\Http\Controllers\Pengrajin;
+use App\Http\Controllers\BahanMentahController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -91,6 +93,26 @@ Route::middleware('auth')->group(function () {
 		Route::get('/', 'index')->name('customer');
 		Route::get('/detail/{barang}', 'detail');
 		Route::get('/category/{kategori:id}', 'category');
+	});
+
+	//Pengrajin
+	Route::controller(Pengrajin::class)->prefix('pengrajin')->group(function(){
+		Route::get('/', 'index')->name('pengrajin');
+		Route::get('tambah', 'tambah')->name('pengrajin.tambah');
+		Route::post('tambah', 'simpan')->name('pengrajin.tambah.simpan');
+		Route::post('edit/{id}', 'update')->name('pengrajin.tambah.update');
+		Route::get('edit/{id}', 'edit')->name('pengrajin.edit');
+		Route::get('hapus/{id}', 'hapus')->name('pengrajin.hapus');
+	});
+
+	//Bahan Mentah
+	Route::controller(BahanMentahController::class)->prefix('bahan_mentah')->group(function(){
+		Route::get('/', 'index')->name('bahan_mentah');
+		Route::get('tambah', 'tambah')->name('bahan_mentah.tambah');
+		Route::post('tambah', 'simpan')->name('bahan_mentah.tambah.simpan');
+		Route::post('edit/{id}', 'update')->name('bahan_mentah.tambah.update');
+		Route::get('edit/{id}', 'edit')->name('bahan_mentah.edit');
+		Route::get('hapus/{id}', 'hapus')->name('bahan_mentah.hapus');
 	});
 
 	//Penjual

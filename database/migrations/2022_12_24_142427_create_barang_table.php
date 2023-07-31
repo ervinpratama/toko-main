@@ -18,6 +18,7 @@ return new class extends Migration
 			$table->string('kode_barang')->nullable();
 			$table->string('nama_barang')->nullable();
 			$table->string('kategori_barang')->nullable();
+			$table->integer('id_pengrajin');
 			$table->integer('harga')->nullable();
 			$table->integer('jumlah')->nullable();
             $table->string('ukuran')->nullable();

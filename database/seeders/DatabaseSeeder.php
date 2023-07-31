@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\PengrajinModel;
 use App\Models\Kategori;
 use App\Models\Barang;
 
@@ -43,6 +44,18 @@ class DatabaseSeeder extends Seeder
             'status'    => '1'
         ]);
 
+        PengrajinModel::create([
+            'nama' => 'Ahmad',
+            'kerajinan' => 'Lemari Hias',
+            'total' => '23',
+        ]);
+
+        PengrajinModel::create([
+            'nama' => 'Rudi',
+            'kerajinan' => 'Keranjang Hias',
+            'total' => '100',
+        ]);
+
         Kategori::create([
             'nama' => 'Kategori 1',
             'foto' => ''
@@ -56,6 +69,7 @@ class DatabaseSeeder extends Seeder
         Barang::create([
             'kode_barang' => 'B001',
 			'nama_barang' => 'Barang 1',
+            'id_pengrajin' => 1,
 			'id_kategori' => '1',
 			'harga' => 10000,
 			'jumlah' => 100,
@@ -66,6 +80,7 @@ class DatabaseSeeder extends Seeder
             'kode_barang' => 'B002',
 			'nama_barang' => 'Barang 2',
 			'id_kategori' => '2',
+            'id_pengrajin' => 2,
 			'harga' => 10000,
 			'jumlah' => 100,
 			'foto' => ''

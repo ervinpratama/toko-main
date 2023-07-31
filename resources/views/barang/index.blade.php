@@ -41,6 +41,7 @@
                         <th>Harga</th>
                         <th>Ukuran</th>
                         <th>Stok</th>
+                        <th>Pengrajin</th>
                         @if (auth()->user()->level == 'Penjual')
                             <th>Aksi</th>
                         @endif
@@ -56,10 +57,11 @@
                             <td>{{ $row->harga }}</td>
                             <td>{{ $row->ukuran }}</td>
                             <td>{{ $row->jumlah }}</td>
+                            <td>{{ $row->nama_pengrajin }}</td>
                             @if (auth()->user()->level == 'Penjual')
                                 <td>
-                                    <a href="{{ route('barang.edit', $row->id) }}" class="btn btn-warning">Edit</a>
-                                    <a href="{{ route('barang.hapus', $row->id) }}" class="btn btn-danger">Hapus</a>
+                                    <a href="{{ route('barang.edit', $row->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{{ route('barang.hapus', $row->id) }}" class="btn btn-danger btn-sm">Hapus</a>
                                 </td>
                             @endif
                         </tr>
