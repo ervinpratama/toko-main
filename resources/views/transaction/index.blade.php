@@ -93,7 +93,7 @@
                          <span class="badge badge-danger">Pesanan Dibatalkan</span>
                         @elseif($transaction->bukti_transfer->status == 'selesai')
                          <span class="badge badge-info">Pesanan Selesai</span>
-                        @elseif($transaction->bukti_transfer->status == 'Refund')
+                        @elseif($transaction->bukti_transfer->status == 'Refund Selesai')
                          <span class="badge badge-success">Refund Selesai</span>
                         @else
                         <span class="badge badge-warning">Pending</span>
